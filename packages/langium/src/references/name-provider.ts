@@ -23,23 +23,28 @@ export interface NameProvider {
      * Returns the `name` of a given AstNode.
      * @param node Specified `AstNode` whose name node shall be retrieved.
      */
-    getName(node: AstNode): string | undefined;
+    getName<N extends NamedAstNode>(node: N): string
+    getName<N extends AstNode>(node: N): string | undefined
     /**
      * Returns the `CstNode` which contains the parsed value of the `name` assignment.
      * @param node Specified `AstNode` whose name node shall be retrieved.
      */
-    getNameNode(node: AstNode): CstNode | undefined;
+    getNameNode<N extends NamedAstNode>(node: N): CstNode
+    getNameNode<N extends AstNode>(node: N): CstNode | undefined  
 }
 
 export class DefaultNameProvider implements NameProvider {
-    getName(node: AstNode): string | undefined {
+    
+    getName<N extends NamedAstNode>(node: N): string
+    getName<N extends AstNode>(node: N): string | undefined {
         if (isNamed(node)) {
             return node.name;
         }
         return undefined;
     }
-
-    getNameNode(node: AstNode): CstNode | undefined {
+    
+    getNameNode<N extends NamedAstNode>(node: N): CstNode
+    getNameNode<N extends AstNode>(node: N): CstNode | undefined {
         return findNodeForProperty(node.$cstNode, 'name');
     }
 }
